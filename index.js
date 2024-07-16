@@ -29,5 +29,36 @@ app.get("/", async (req, res) => {
   }
 });
 
+app.get("/update-cobj", async (req, res) => {
+  try {
+    res.render("updates", {
+      title: "Update Custom Object Form | Integrating With HubSpot I Practicum",
+    });
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+app.post("/update-cobj", async (req, res) => {
+  const customObj = "https://api.hubspot.com/crm/v3/objects/2-31811979";
+  const newData = {
+    properties: {
+      ...req.body,
+    },
+  };
+  const headers = {
+    Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+    "Content-Type": "application/json",
+  };
+  try {
+    await axios.post(customObj, newData, { headers });
+    res.redirect("/");
+  } catch (error) {
+    console.error("error", error);
+  }
+});
+
+
+
 // * Localhost
 app.listen(3000, () => console.log('Listening on http://localhost:3000'));
